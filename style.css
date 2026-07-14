@@ -935,7 +935,20 @@ footer {
   .chart-card {
     padding: 16px;
   }
-  
+
+  #records {
+    padding: 14px;
+  }
+
+  .table-container {
+    margin: 0 -14px;
+    padding: 0 14px;
+  }
+
+  .records-header h3 {
+    font-size: 14px;
+  }
+
   footer {
     flex-direction: column;
     align-items: stretch;
@@ -991,6 +1004,10 @@ footer {
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;
+  }
+
+  .records-header h3 {
+    font-size: 14px;
   }
   
   .view-tab {
