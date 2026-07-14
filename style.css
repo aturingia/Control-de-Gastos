@@ -869,6 +869,7 @@ footer {
   .header-center {
     order: 3;
     width: 100%;
+    flex: none;
     justify-content: space-between;
   }
   
@@ -992,23 +993,24 @@ footer {
 }
 
 @media (max-width: 360px) {
-  header {
-    padding: 8px 10px;
+  .header-inner {
+    overflow: hidden;
+    gap: 4px;
   }
 
-  .header-inner {
-    gap: 6px;
+  header {
+    padding: 6px 8px;
   }
 
   .logo {
-    font-size: 14px;
-    gap: 5px;
+    font-size: 13px;
+    gap: 4px;
   }
 
   .logo-icon {
-    width: 26px;
-    height: 26px;
-    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
   }
 
   .header-center {
@@ -1016,26 +1018,26 @@ footer {
   }
 
   .period-nav button {
-    width: 24px;
-    height: 24px;
-    font-size: 10px;
+    width: 22px;
+    height: 22px;
+    font-size: 9px;
   }
 
   #periodLabel {
-    font-size: 11px;
-    min-width: 70px;
-    padding: 0 3px;
+    font-size: 10px;
+    min-width: 60px;
+    padding: 0 2px;
   }
 
   .view-tab {
-    padding: 4px 7px;
-    font-size: 10px;
+    padding: 3px 6px;
+    font-size: 9px;
   }
 
   #themeToggle {
-    width: 26px;
-    height: 26px;
-    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
   }
 
   main {
