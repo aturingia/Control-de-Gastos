@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#F4F6FA">
+  <meta name="description" content="Control de Gastos - App web minimalista y moderna">
+  <title>Control de Gastos</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23FF6B35'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-size='18' font-weight='bold' fill='white' font-family='sans-serif'%3E%24%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      var theme = localStorage.getItem('gastos_theme');
+      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon"><i class="fas fa-wallet"></i></span>
+        Control de Gastos
+      </div>
+      <div class="header-center">
+        <div class="period-nav">
+          <button id="prevPeriod" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
+          <span id="periodLabel">Cargando...</span>
+          <button id="nextPeriod" aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="view-tabs">
+          <button class="view-tab" data-view="weekly">Semanal</button>
+          <button class="view-tab active" data-view="monthly">Mensual</button>
+          <button class="view-tab" data-view="yearly">Anual</button>
+        </div>
+      </div>
+      <div class="header-right">
+        <button id="themeToggle" aria-label="Cambiar tema"><i class="fas fa-moon"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="summary">
+      <div class="summary-card ingresos">
+        <span class="label">Ingresos</span>
+        <span class="amount" id="totalIngresos">$0</span>
+      </div>
+      <div class="summary-card egresos">
+        <span class="label">Egresos</span>
+        <span class="amount" id="totalEgresos">$0</span>
+      </div>
+      <div class="summary-card balance">
+        <span class="label">Balance</span>
+        <span class="amount" id="totalBalance">$0</span>
+      </div>
+    </section>
+
+    <section id="charts">
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-pie" style="margin-right:6px;color:var(--primary)"></i>Gastos por categoría</h3>
+        <div class="chart-wrapper donut" id="donutWrapper">
+          <canvas id="donutChart"></canvas>
+          <div class="chart-empty">
+            <i class="fas fa-chart-pie"></i>
+            <p>No hay gastos en este período</p>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3><i class="fas fa-chart-line" style="margin-right:6px;color:var(--primary)"></i>Ingresos vs Egresos</h3>
+        <div class="chart-wrapper line" id="lineWrapper">
+          <canvas id="lineChart"></canvas>
+          <div class="chart-empty">
+            <i class="fas fa-chart-line"></i>
+            <p>No hay datos en este período</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="filters"></div>
+
+    <section id="records">
+      <div class="records-header">
+        <h3><i class="fas fa-list" style="margin-right:6px;color:var(--primary)"></i>Registros</h3>
+        <div class="actions-row">
+          <button class="btn btn-primary" id="addRecord"><i class="fas fa-plus"></i> Nuevo</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Concepto</th>
+              <th>Categoría</th>
+              <th style="text-align:right">Ingreso</th>
+              <th style="text-align:right">Egreso</th>
+              <th style="text-align:right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="recordsBody">
+            <tr>
+              <td colspan="6">
+                <div class="empty-state">
+                  <i class="fas fa-spinner fa-spin"></i>
+                  <p>Cargando...</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span class="footer-info"><i class="fas fa-database" style="margin-right:4px;color:var(--primary)"></i> <span id="recordCount">0 registros</span></span>
+    <div class="footer-actions">
+      <button class="btn btn-secondary" id="importBtn"><i class="fas fa-upload"></i> Importar CSV</button>
+      <button class="btn btn-secondary" id="exportBtn"><i class="fas fa-download"></i> Exportar CSV</button>
+      <button class="btn btn-secondary" id="clearBtn" style="color:var(--danger);border-color:var(--danger)"><i class="fas fa-trash"></i> Limpiar todo</button>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Nuevo registro</h3>
+        <button class="modal-close" id="modalClose" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="recordForm" novalidate>
+        <input type="hidden" id="recordId" name="recordId">
+        <div class="form-group">
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" name="fecha" required>
+        </div>
+        <div class="form-group">
+          <label for="concepto">Concepto</label>
+          <input type="text" id="concepto" name="concepto" placeholder="Ej: Supermercado mensual" required>
+        </div>
+        <div class="form-group">
+          <label for="categoria">Categoría</label>
+          <select id="categoria" name="categoria" required>
+            <option value="">Seleccionar categoría</option>
+            <option value="viáticos">Viáticos</option>
+            <option value="despensas">Despensas</option>
+            <option value="servicios">Servicios</option>
+            <option value="suntuarios">Suntuarios</option>
+            <option value="créditos">Créditos</option>
+            <option value="prestamos">Préstamos</option>
+            <option value="refacciones">Refacciones</option>
+            <option value="alquiler">Alquiler</option>
+            <option value="trabajo">Trabajo</option>
+            <option value="sueldo">Sueldo</option>
+            <option value="insumos">Insumos</option>
+            <option value="e-commerce">E-commerce</option>
+            <option value="otros">Otros</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ingreso">Ingreso ($)</label>
+            <input type="number" id="ingreso" name="ingreso" min="0" step="0.01" placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label for="egreso">Egreso ($)</label>
+            <input type="number" id="egreso" name="egreso" min="0" step="0.01" placeholder="0.00">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
+          <button type="submit" class="btn-save"><i class="fas fa-check"></i> Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" accept=".csv" aria-hidden="true">
+
+  <div id="toast"></div>
+
+  <script src="js/theme.js"></script>
+  <script src="js/csv.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
