@@ -82,8 +82,15 @@ function parseCSV(text) {
     let categoria = (raw.categoria || '').toLowerCase().trim();
     if (!CATEGORIES.includes(categoria)) categoria = 'otros';
 
-    const ingreso = parseFloat((raw.ingreso || '0').replace(/[,$.\s]/g, '')) || 0;
-    const egreso = parseFloat((raw.egreso || '0').replace(/[,$.\s]/g, '')) || 0;
+    const parseNum = str => {
+      let s = (str || '0').replace(/[$\s]/g, '');
+      if (s.includes(',')) {
+        s = s.replace(/\./g, '').replace(',', '.');
+      }
+      return parseFloat(s) || 0;
+    };
+    const ingreso = parseNum(raw.ingreso);
+    const egreso = parseNum(raw.egreso);
 
     if (ingreso === 0 && egreso === 0) {
       errors.push(`Línea ${i + 1}: debe tener ingreso o egreso mayor a 0`);
