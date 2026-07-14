@@ -66,6 +66,9 @@ body {
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
   transition: background var(--transition), color var(--transition);
 }
 
@@ -483,7 +486,6 @@ main {
 /* ===== TABLE ===== */
 .table-container {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   margin: 0 -20px;
   padding: 0 20px;
 }
@@ -832,6 +834,8 @@ footer {
 @media (max-width: 720px) {
   header {
     padding: 10px 16px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
   
   main {
@@ -934,6 +938,11 @@ footer {
     justify-content: center;
   }
   
+  .modal-overlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
   .modal-content {
     padding: 20px;
   }
@@ -989,6 +998,26 @@ footer {
     width: 32px;
     height: 32px;
     font-size: 14px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn,
+  .form-actions .btn-cancel,
+  .form-actions .btn-save {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .footer-actions {
+    flex-direction: column;
+  }
+
+  .footer-actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -1131,13 +1160,70 @@ footer {
     padding: 14px;
   }
 
+  .table-container {
+    margin: 0 -14px;
+    padding: 0 14px;
+  }
+
+  .records-header h3 {
+    font-size: 14px;
+  }
+
+  .cell-monto {
+    font-size: 12px;
+  }
+
   footer {
     padding: 0 10px 12px;
     gap: 8px;
   }
 
+  .footer-actions {
+    flex-direction: column;
+  }
+
+  .footer-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
   .footer-info {
     font-size: 11px;
+  }
+
+  .chart-wrapper.line {
+    min-height: 180px;
+  }
+
+  .chart-empty {
+    padding: 24px 14px;
+  }
+
+  .chart-empty i {
+    font-size: 28px;
+  }
+
+  .empty-state {
+    padding: 32px 14px;
+  }
+
+  .empty-state i {
+    font-size: 36px;
+  }
+
+  .empty-state p {
+    font-size: 13px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn,
+  .form-actions .btn-cancel,
+  .form-actions .btn-save {
+    width: 100%;
+    justify-content: center;
   }
 
   #toast {
