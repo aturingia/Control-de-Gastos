@@ -949,6 +949,16 @@ footer {
     font-size: 14px;
   }
 
+  #filters {
+    gap: 6px;
+    padding: 2px 0;
+  }
+
+  .cat-pill {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+
   footer {
     flex-direction: column;
     align-items: stretch;
@@ -1107,11 +1117,11 @@ footer {
   .summary-card {
     padding: 12px 14px;
   }
-
+  
   .summary-card .amount {
     font-size: 18px;
   }
-
+  
   .summary-card .label {
     font-size: 11px;
   }
