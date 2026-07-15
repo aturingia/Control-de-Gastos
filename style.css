@@ -242,6 +242,10 @@ main {
   gap: 20px;
 }
 
+main > * {
+  min-width: 0;
+}
+
 /* ===== SUMMARY ===== */
 #summary {
   display: grid;
@@ -256,6 +260,7 @@ main {
   border: 1px solid var(--border);
   transition: all var(--transition);
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
 .summary-card:hover {
@@ -278,6 +283,8 @@ main {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.5px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .summary-card.ingresos .amount { color: var(--success); }
@@ -299,6 +306,7 @@ main {
   border: 1px solid var(--border);
   padding: 20px;
   box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
 .chart-card h3 {
@@ -311,6 +319,7 @@ main {
 .chart-wrapper {
   position: relative;
   width: 100%;
+  min-width: 0;
 }
 
 .chart-wrapper.donut {
@@ -397,6 +406,7 @@ main {
   border: 1px solid var(--border);
   padding: 20px;
   box-shadow: var(--shadow-sm);
+  min-width: 0;
 }
 
 .records-header {
@@ -538,6 +548,7 @@ tbody tr:last-child td {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 
 .cell-categoria {
@@ -835,6 +846,10 @@ footer {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
+  #summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
   #charts {
     grid-template-columns: 1fr;
   }
@@ -1018,6 +1033,10 @@ footer {
 
   .records-header h3 {
     font-size: 14px;
+  }
+
+  .chart-wrapper.donut {
+    max-width: 220px;
   }
   
   .view-tab {
